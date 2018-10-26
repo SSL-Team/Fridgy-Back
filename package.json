@@ -1,6 +1,8 @@
 {
   "name": "fridgy-back",
   "version": "0.0.0",
+  "description": "The backend of the fridgy app.",
+  "main": "index.js",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
