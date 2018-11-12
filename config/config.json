@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "password",
+    "database": "postgres",
+    "host": "postgrestest.cly9ucferfkv.us-east-1.rds.amazonaws.com",
+    "dialect": "postgresql"
+  },
+  "test": {
+    "username": "root",
+    "password": "password",
+    "database": "postgres",
+    "host": "postgrestest.cly9ucferfkv.us-east-1.rds.amazonaws.com",
+    "dialect": "postgresql"
+  },
+  "production": {
+    "username": "root",
+    "password": "password",
+    "database": "postgres",
+    "host": "postgrestest.cly9ucferfkv.us-east-1.rds.amazonaws.com",
+    "dialect": "postgresql"
+  }
+}

@@ -1,49 +1,37 @@
-    var express    = require('express')
-    var app        = express()
-    var passport   = require('passport')
-    var session    = require('express-session')
-    var bodyParser = require('body-parser')
-    var env        = require('dotenv').load()
-    var exphbs     = require('express-handlebars')
+const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
+const passport = require('./middlewares/auth');
+const bodyParser = require('body-parser');
+const express = require('express');
+const models = require('./models');
+const PORT = process.env.PORT || 8000;
 
-    //For BodyParser
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+const app = express();
 
-     // For Passport
-    app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true})); // session secret
-    app.use(passport.initialize());
-    app.use(passport.session()); // persistent login sessions
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.get('/', function(req, res){
-	  res.send('Welcome to Passport with Sequelize');
-	});
+app.use(cookieParser());
 
-	//Models
-    var models = require("./app/models");
+app.use(expressSession(({
+  secret: 'keyboard cat - REPLACE ME WITH A BETTER SECRET',
+  resave: false,
+  saveUninitialized: true,
+})));
 
-    //Routes
-    var routes = require('./app/routes/routes.js')(app,passport);
+app.use(passport.initialize());
+app.use(passport.session());
 
-    //load passport strategies
-    require('./app/config/passport/passport.js')(passport,models.user);
+// Load up all of the controllers
+const controllers = require('./controllers');
+app.use(controllers)
 
 
-    //Sync Database
-   	models.sequelize.sync().then(function(){
-    console.log('Nice! Database looks fine')
-
-    }).catch(function(err){
-    console.log(err,"Something went wrong with the Database Update!")
+// First, make sure the Database tables and models are in sync
+// then, start up the server and start listening.
+models.sequelize.sync({force: false})
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is up and running on port: ${PORT}`)
     });
-
-	app.listen(5000, function(err){
-		if(!err)
-		console.log("Server live on port 5000!"); else console.log(err)
-
-	});
-
-
-
-
-    
+  });
