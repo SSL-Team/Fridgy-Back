@@ -13,14 +13,16 @@
   },
   "homepage": "https://github.com/SSL-Team/Fridgy-Back.git#readme",
   "devDependencies": {
-    "nodemon": "^1.18.5",
-    "jest": "^21.2.1"
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "jest": "^21.2.1",
+    "nodemon": "^1.18.5"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
-    "eslint": "^5.9.0",
     "express": "^4.16.1",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
