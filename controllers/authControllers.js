@@ -22,17 +22,18 @@ module.exports.signup = function (req, res) {
 
 
 module.exports.login = function (req, res, next) {
-  passport.authenticate('local', { failureRedirect: '/api/auth/error' })(req, res, next);
-},
-  (req, res) => {
-    console.log('Next')
-    res.json({
-      id: req.user.id,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
-      email: req.user.email,
-    });
-  }
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      res.redirect('/auth/api/error')
+    }
+    if (user) {
+      // todo remove password hash
+      res.json(user);
+    } else {
+      res.status(404).json({ msg: 'Professional error message' });
+    }
+  })(req, res, next);
+};
 
 
 module.exports.logout = function (req, res) {
