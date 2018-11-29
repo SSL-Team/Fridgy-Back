@@ -2,8 +2,7 @@
     "extends": "airbnb-base",
     "rules": {
         "linebreak-style":"off",
-        "no-console":"off",
-        "implicit-arrow-linebreak":"off" 
+        "no-console":"off"
     },
     "settings": {
 

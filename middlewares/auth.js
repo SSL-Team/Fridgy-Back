@@ -46,9 +46,11 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.redirectIfLoggedIn = route =>
+  // eslint-disable-next-line implicit-arrow-linebreak
   (req, res, next) => (req.user ? res.redirect(route) : next());
 
 passport.redirectIfNotLoggedIn = route =>
+  // eslint-disable-next-line implicit-arrow-linebreak
   (req, res, next) => (req.user ? next() : res.redirect(route));
 
 module.exports = passport;
