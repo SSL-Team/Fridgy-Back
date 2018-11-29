@@ -1,6 +1,7 @@
 const passport = require('../middlewares/auth');
 const models = require('../models');
-const User = models.User;
+
+const { User } = models;
 
 module.exports.error = function (req, res) {
   res.sendStatus(401).json({ msg: "authenticaiton error"});
