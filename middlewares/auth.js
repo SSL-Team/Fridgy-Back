@@ -12,9 +12,11 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
   },
   (email, password, done) => {
+    console.log( 'Need body' )
     User.findOne({
       where: { email },
     }).then((user) => {
+      console.log({ user })
       if(!user) {
         return done(null, false, { message: 'Incorrect email.' });
       }

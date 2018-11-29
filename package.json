@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/SSL-Team/Fridgy-Back.git#readme",
   "devDependencies": {
+    "dotenv": "^6.1.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
