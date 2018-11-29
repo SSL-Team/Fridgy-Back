@@ -38,7 +38,7 @@ module.exports.login = function (req, res, next) {
 
 module.exports.logout = function (req, res) {
   req.logout();
-  res.json({ msg: "user logged out successfully"});
+  res.json({ msg: 'user logged out successfully'});
 };
 
 
