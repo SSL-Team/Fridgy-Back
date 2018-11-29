@@ -1,15 +1,12 @@
-const express = require('express');
-const models = require('../models');
 const passport = require('../middlewares/auth');
-
-const router = express.Router();
+const models = require('../models');
 const User = models.User;
 
-router.get('/error', (req, res) => {
+module.exports.error = function (req, res) {
   res.sendStatus(401).json({ msg: "authenticaiton error"});
-})
+};
 
-router.post('/signup', (req,res) => {
+module.exports.signup = function (req, res) {
   User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -21,32 +18,32 @@ router.post('/signup', (req,res) => {
   }).catch(() => {
     res.status(400).json({ msg: "error creating user " + req.body.email });
   });
-});
+};
 
 
-router.post('/login',
-  passport.authenticate('local', { failureRedirect: '/error' }),
+module.exports.login = function (req, res, next) {
+  passport.authenticate('local', { failureRedirect: '/api/auth/error' })(req, res, next);
+},
   (req, res) => {
+    console.log('Next')
     res.json({
       id: req.user.id,
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       email: req.user.email,
     });
-  });
+  }
 
 
-router.get('/logout', (req, res) => {
+module.exports.logout = function (req, res) {
   req.logout();
-  res.sendStatus(200);
-});
+  res.json({ msg: "user logged out successfully"});
+};
 
 
-router.get('/profile',
+module.exports.profile = function (req, res) {
   passport.redirectIfNotLoggedIn('/error'),
   (req, res) => {
     res.json({ msg: "This is the profile page for: "+req.user.email });
-});
-
-
-module.exports = router;
+  }
+};

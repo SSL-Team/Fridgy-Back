@@ -4,6 +4,7 @@ const passport = require('./middlewares/auth');
 const bodyParser = require('body-parser');
 const express = require('express');
 const models = require('./models');
+
 const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -22,9 +23,9 @@ app.use(expressSession(({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Load up all of the controllers
-const controllers = require('./controllers');
-app.use(controllers)
+// Load up all of the routes
+const routes = require('./routes/routes');
+app.use('/api', routes);
 
 
 // First, make sure the Database tables and models are in sync
