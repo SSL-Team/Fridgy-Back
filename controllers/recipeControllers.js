@@ -9,8 +9,6 @@ const instance = axios.create({
   },
 });
 module.exports.recipesByMissing = function recipesByMissingExport(req, res) {
-  console.log('In to recipes');
-  console.log(req.params.ingredients);
   instance.get('/recipes/findByIngredients', {
     params: {
       fillIngredients: 'true',
@@ -30,7 +28,6 @@ module.exports.recipesByMissing = function recipesByMissingExport(req, res) {
 };
 
 module.exports.recipeDetail = function recipeDetailExport(req, res) {
-  console.log('In to recipes');
   instance.get(`/recipes/${req.body.ingredientID}/information`)
     .then((response) => {
       console.log(response.data);
