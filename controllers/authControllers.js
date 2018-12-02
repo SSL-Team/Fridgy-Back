@@ -28,13 +28,21 @@ module.exports.signup = function signupExport(req, res) {
 module.exports.login = function loginExport(req, res, next) {
   passport.authenticate('local', (err, user) => {
     if (err) {
-      res.redirect('/auth/api/error');
+      return res.redirect('/auth/api/error');
     }
     if (user) {
-      // todo remove password hash
-      res.json(user);
+      req.logIn(user, (error) => {
+        if (!error) {
+          return res.json({
+            msg: 'User logged in successfully!',
+            email: user.email,
+            username: user.username,
+            firstName: user.firstName,
+          });
+        }
+      });
     } else {
-      res.status(404).json({ msg: 'Professional error message' });
+      return res.redirect('/api/auth/error');
     }
   })(req, res, next);
 };

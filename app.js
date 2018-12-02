@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(expressSession(({
-  secret: 'keyboard cat - REPLACE ME WITH A BETTER SECRET',
+  secret: '$$$BigMoney$$$',
   resave: false,
   saveUninitialized: true,
 })));
