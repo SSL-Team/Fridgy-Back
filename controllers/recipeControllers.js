@@ -1,4 +1,8 @@
 const axios = require('axios');
+const models = require('../models');
+
+const { User } = models;
+const { Ingredient } = models;
 
 const instance = axios.create({
   baseURL: 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/',

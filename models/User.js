@@ -2,6 +2,12 @@ const bcrypt = require('bcrypt-nodejs');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -38,7 +44,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
   });
-
   User.beforeCreate(user => new sequelize.Promise((resolve) => {
     bcrypt.hash(user.password_hash, null, null, (err, hashedPassword) => {
       resolve(hashedPassword);

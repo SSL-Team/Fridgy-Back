@@ -32,4 +32,6 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.User.hasMany(db.Ingredient, { foreignKey: 'userID', sourceKey: 'id' });
+
 module.exports = db;
