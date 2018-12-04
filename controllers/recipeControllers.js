@@ -1,24 +1,26 @@
 const axios = require('axios');
 const models = require('../models');
+const dotenv = require('dotenv').load();
 
 const { User } = models;
 const { Ingredient } = models;
+const API_KEY = process.env.API_KEY;
 
 const instance = axios.create({
   baseURL: 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/',
   headers: {
-    'X-Mashape-Key': 'fksswi9JFjmshqFnHPSAG6nnwVLGp1zCTMljsnLz4mNJba69KY',
+    'X-Mashape-Key': API_KEY,
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 });
-const localInstance = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-});
+
 module.exports.recipesByMissing = function recipesByMissingExport(req, res) {
+  console.log(process.env.API_KEY);
+  console.log(typeof process.env.API_KEY);
   Ingredient.findAll({ where: { userID: req.user.id } }).then((ingredients) => {
     const ingredientNames = ingredients.map(currIngredient => currIngredient.ingredientName).join();
-    console.log(ingredientNames);
+    // console.log(ingredientNames);
     instance.get('/recipes/findByIngredients', {
       params: {
         fillIngredients: 'true',
