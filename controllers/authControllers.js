@@ -51,12 +51,3 @@ module.exports.logout = function logoutExport(req, res) {
   req.logout();
   res.json({ msg: 'user logged out successfully' });
 };
-
-// Change to fix the same problem had with login function
-// Also does not belong in auth controllers
-// module.exports.profile = function profileExport(req, res) {
-//   passport.redirectIfNotLoggedIn('/error'),
-//   (req, res) => {
-//     res.json({ msg: "This is the profile page for: "+req.user.email });
-//   }
-// };

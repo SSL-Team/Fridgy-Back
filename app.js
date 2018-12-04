@@ -5,6 +5,7 @@ const express = require('express');
 const passport = require('./middlewares/auth');
 const models = require('./models');
 const routes = require('./routes/routes');
+const dotenv = require('dotenv').load();
 
 const PORT = process.env.PORT || 8000;
 
