@@ -6,6 +6,6 @@ const userRoutes = require('./userRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/recipes', passport.loggedIn, recipesRoutes);
-router.use('/user', userRoutes);
+router.use('/user', passport.loggedIn, userRoutes);
 
 module.exports = router;
