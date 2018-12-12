@@ -18,17 +18,18 @@ const instance = axios.create({
 const { Ingredient } = models;
 
 module.exports.addIngredientsFromRecipe = function addIngredientsFromRecipeExport(req, res) {
+  console.log(req.body);
   const ingredients = req.body.ingredients;
   ingredients.map((currentIngredient) => {
-    console.log(currentIngredient.id);
+    console.log(currentIngredient.ID);
     Ingredient.create({
       userID: userId,
-      ID: currentIngredient.id,
-      Name: currentIngredient.name,
-      Type: currentIngredient.aisle,
-      ImgURL: currentIngredient.image,
+      ID: currentIngredient.ID,
+      Name: currentIngredient.Name,
+      Type: currentIngredient.Type,
+      ImgURL: currentIngredient.ImgURL,
     }).then((ingredient) => {
-      console.log(`${ingredient.ingredientName} added!`);
+      console.log(`${ingredient.Name} added!`);
     }).catch((error) => {
       console.log(`error adding ${currentIngredient.Name}\n${error}`);
     });
@@ -85,18 +86,20 @@ module.exports.getIngredients = function getIngredientsExport(req, res) {
 };
 
 module.exports.deleteIngredients = function deleteIngredientsExport(req, res) {
-  const ingredients = req.body.ingredients;
-  const ingredientIds = ingredients.map(currentIngredient => currentIngredient.id);
+  console.log(req.query.ingredients);
+  const ingredientIds = req.query.ingredients;
   Ingredient.destroy({
     where: {
       userID: userId,
       ID: ingredientIds,
     },
   }).then(() => {
+    console.log('Successfully deleted items');
     res.json({
       msg: 'successfully deleted items',
     });
   }).catch((error) => {
+    console.log('Error deleting items');
     res.json({
       msg: 'Error deleting items',
       err: error,

@@ -45,8 +45,6 @@ module.exports.recipesByMissing = function recipesByMissingExport(req, res) {
 };
 
 module.exports.recipeDetail = function recipeDetailExport(req, res) {
-  console.log('RECIPE DETAIL REQUEST');
-  console.log(req.query.recipeId);
   const recipeId = req.query.recipeId;
   instance.get(`/recipes/${recipeId}/information`)
     .then((response) => {
