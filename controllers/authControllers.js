@@ -26,23 +26,32 @@ module.exports.signup = function signupExport(req, res) {
 };
 
 module.exports.login = function loginExport(req, res, next) {
+  console.log(req.body.email);
   passport.authenticate('local', (err, user) => {
     if (err) {
-      return res.redirect('/auth/api/error');
+      return res.json({
+        err: 'Not able to authenticate',
+      });
     }
     if (user) {
       req.logIn(user, (error) => {
         if (!error) {
+          console.log('logged in!');
+          console.log(req);
           return res.json({
             msg: 'User logged in successfully!',
             email: user.email,
             username: user.username,
             firstName: user.firstName,
+            userId: user.id,
+            cookie: req.headers.cookie,
           });
         }
       });
     } else {
-      return res.redirect('/api/auth/error');
+      return res.json({
+        err: 'Not able to authenticate',
+      });
     }
   })(req, res, next);
 };

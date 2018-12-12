@@ -54,9 +54,11 @@ passport.redirectIfNotLoggedIn = route =>
 module.exports = passport;
 
 module.exports.loggedIn = function loggedIn(req, res, next) {
+  console.log('USER');
+  console.log(req.user);
   if (req.user) {
     next();
   } else {
-    res.status(401).json('User not logged in');
+    res.status(401).json('User not logged in!!');
   }
 };

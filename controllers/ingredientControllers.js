@@ -1,23 +1,36 @@
 /* eslint-disable prefer-destructuring */
+const axios = require('axios');
+const dotenv = require('dotenv').load();
+const querystring = require('querystring');
 const models = require('../models');
 
+const API_KEY = process.env.API_KEY;
+
+const instance = axios.create({
+  baseURL: 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/',
+  headers: {
+    'X-Mashape-Key': API_KEY,
+    'Access-Control-Allow-Origin': '*',
+    'cache-control': 'no-cache',
+    Connection: 'keep-alive',
+  },
+});
 const { Ingredient } = models;
 
-module.exports.addIngredients = function addIngredientsExport(req, res) {
+module.exports.addIngredientsFromRecipe = function addIngredientsFromRecipeExport(req, res) {
   const ingredients = req.body.ingredients;
   ingredients.map((currentIngredient) => {
     console.log(currentIngredient.id);
     Ingredient.create({
-      userID: req.user.id,
-      ingredientNum: currentIngredient.id,
-      ingredientName: currentIngredient.name,
+      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
+      ID: currentIngredient.id,
+      Name: currentIngredient.name,
+      Type: currentIngredient.aisle,
+      ImgURL: currentIngredient.image,
     }).then((ingredient) => {
       console.log(`${ingredient.ingredientName} added!`);
-    }).catch((reason) => {
-      res.json({
-        where: 'error creating ingredients',
-        err: reason,
-      });
+    }).catch((error) => {
+      console.log(`error adding ${currentIngredient.Name}\n${error}`);
     });
   });
   res.json({
@@ -25,8 +38,41 @@ module.exports.addIngredients = function addIngredientsExport(req, res) {
   });
 };
 
+module.exports.addIngredientsFromFridge = function addIngredientsFromFridgeExport(req, res) {
+  const ingredientString = req.body.ingredientString;
+  instance.post('/recipes/parseIngredients', querystring.stringify({
+    ingredientList: ingredientString,
+    servings: '1',
+  })).then((response) => {
+    console.log(response.data[0].id);
+    Ingredient.create({
+      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
+      ID: response.data[0].id,
+      Name: response.data[0].name,
+      Type: response.data[0].aisle,
+      ImgURL: `https://spoonacular.com/cdn/ingredients_100x100/${response.data[0].image}`,
+    }).then((ingredient) => {
+      res.json({
+        status: 'success',
+        ingredient,
+      });
+    }).catch((error) => {
+      res.json({
+        status: 'error',
+        error,
+      });
+    });
+  }).catch((error) => {
+    console.log(`Error fetching ingredient \n${error}`);
+    res.json({
+      status: 'failure',
+    });
+  });
+};
+
 module.exports.getIngredients = function getIngredientsExport(req, res) {
-  Ingredient.findAll({ where: { userID: req.user.id } }).then((ingredients) => {
+  // req.user.id
+  Ingredient.findAll({ where: { userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3' } }).then((ingredients) => {
     res.json({
       ingredients,
     });
@@ -43,7 +89,7 @@ module.exports.deleteIngredients = function deleteIngredientsExport(req, res) {
   const ingredientIds = ingredients.map(currentIngredient => currentIngredient.id);
   Ingredient.destroy({
     where: {
-      userID: req.user.id,
+      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
       ingredientNum: ingredientIds,
     },
   }).then(() => {
