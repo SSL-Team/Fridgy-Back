@@ -6,6 +6,7 @@ const passport = require('./middlewares/auth');
 const models = require('./models');
 const routes = require('./routes/routes');
 const dotenv = require('dotenv').load();
+const cors = require('cors');
 
 const PORT = process.env.PORT || 8000;
 
@@ -13,7 +14,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(cors());
 app.use(cookieParser());
 
 app.use(expressSession(({
