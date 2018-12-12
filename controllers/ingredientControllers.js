@@ -5,7 +5,7 @@ const querystring = require('querystring');
 const models = require('../models');
 
 const API_KEY = process.env.API_KEY;
-
+const userId = process.env.USER_ID;
 const instance = axios.create({
   baseURL: 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/',
   headers: {
@@ -22,7 +22,7 @@ module.exports.addIngredientsFromRecipe = function addIngredientsFromRecipeExpor
   ingredients.map((currentIngredient) => {
     console.log(currentIngredient.id);
     Ingredient.create({
-      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
+      userID: userId,
       ID: currentIngredient.id,
       Name: currentIngredient.name,
       Type: currentIngredient.aisle,
@@ -46,7 +46,7 @@ module.exports.addIngredientsFromFridge = function addIngredientsFromFridgeExpor
   })).then((response) => {
     console.log(response.data[0].id);
     Ingredient.create({
-      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
+      userID: userId,
       ID: response.data[0].id,
       Name: response.data[0].name,
       Type: response.data[0].aisle,
@@ -72,7 +72,7 @@ module.exports.addIngredientsFromFridge = function addIngredientsFromFridgeExpor
 
 module.exports.getIngredients = function getIngredientsExport(req, res) {
   // req.user.id
-  Ingredient.findAll({ where: { userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3' } }).then((ingredients) => {
+  Ingredient.findAll({ where: { userID: userId } }).then((ingredients) => {
     res.json({
       ingredients,
     });
@@ -89,8 +89,8 @@ module.exports.deleteIngredients = function deleteIngredientsExport(req, res) {
   const ingredientIds = ingredients.map(currentIngredient => currentIngredient.id);
   Ingredient.destroy({
     where: {
-      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
-      ingredientNum: ingredientIds,
+      userID: userId,
+      ID: ingredientIds,
     },
   }).then(() => {
     res.json({
