@@ -5,7 +5,7 @@ const querystring = require('querystring');
 const models = require('../models');
 
 const API_KEY = process.env.API_KEY;
-
+const userId = process.env.USER_ID;
 const instance = axios.create({
   baseURL: 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/',
   headers: {
@@ -18,17 +18,18 @@ const instance = axios.create({
 const { Ingredient } = models;
 
 module.exports.addIngredientsFromRecipe = function addIngredientsFromRecipeExport(req, res) {
+  console.log(req.body);
   const ingredients = req.body.ingredients;
   ingredients.map((currentIngredient) => {
-    console.log(currentIngredient.id);
+    console.log(currentIngredient.ID);
     Ingredient.create({
-      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
-      ID: currentIngredient.id,
-      Name: currentIngredient.name,
-      Type: currentIngredient.aisle,
-      ImgURL: currentIngredient.image,
+      userID: userId,
+      ID: currentIngredient.ID,
+      Name: currentIngredient.Name,
+      Type: currentIngredient.Type,
+      ImgURL: currentIngredient.ImgURL,
     }).then((ingredient) => {
-      console.log(`${ingredient.ingredientName} added!`);
+      console.log(`${ingredient.Name} added!`);
     }).catch((error) => {
       console.log(`error adding ${currentIngredient.Name}\n${error}`);
     });
@@ -46,7 +47,7 @@ module.exports.addIngredientsFromFridge = function addIngredientsFromFridgeExpor
   })).then((response) => {
     console.log(response.data[0].id);
     Ingredient.create({
-      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
+      userID: userId,
       ID: response.data[0].id,
       Name: response.data[0].name,
       Type: response.data[0].aisle,
@@ -72,7 +73,7 @@ module.exports.addIngredientsFromFridge = function addIngredientsFromFridgeExpor
 
 module.exports.getIngredients = function getIngredientsExport(req, res) {
   // req.user.id
-  Ingredient.findAll({ where: { userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3' } }).then((ingredients) => {
+  Ingredient.findAll({ where: { userID: userId } }).then((ingredients) => {
     res.json({
       ingredients,
     });
@@ -85,18 +86,20 @@ module.exports.getIngredients = function getIngredientsExport(req, res) {
 };
 
 module.exports.deleteIngredients = function deleteIngredientsExport(req, res) {
-  const ingredients = req.body.ingredients;
-  const ingredientIds = ingredients.map(currentIngredient => currentIngredient.id);
+  console.log(req.query.ingredients);
+  const ingredientIds = req.query.ingredients;
   Ingredient.destroy({
     where: {
-      userID: '6b9e185b-a3e9-401d-9d44-3d625aa8d0f3',
-      ingredientNum: ingredientIds,
+      userID: userId,
+      ID: ingredientIds,
     },
   }).then(() => {
+    console.log('Successfully deleted items');
     res.json({
       msg: 'successfully deleted items',
     });
   }).catch((error) => {
+    console.log('Error deleting items');
     res.json({
       msg: 'Error deleting items',
       err: error,
