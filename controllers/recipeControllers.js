@@ -5,7 +5,6 @@ const dotenv = require('dotenv').load();
 const { User } = models;
 const { Ingredient } = models;
 const API_KEY = process.env.API_KEY;
-const userId = process.env.USER_ID;
 
 const instance = axios.create({
   baseURL: 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/',
@@ -17,7 +16,7 @@ const instance = axios.create({
 });
 
 module.exports.recipesByMissing = function recipesByMissingExport(req, res) {
-  Ingredient.findAll({ where: { userID: userId } }).then((ingredients) => {
+  Ingredient.findAll({ where: { userID: req.user.id } }).then((ingredients) => {
     const ingredientNames = ingredients.map(currIngredient => currIngredient.Name).join();
     instance.get('/recipes/findByIngredients', {
       params: {
