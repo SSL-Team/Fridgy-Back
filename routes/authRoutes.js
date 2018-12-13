@@ -5,6 +5,7 @@ router.get('/error', authControllers.error);
 router.post('/signup', authControllers.signup);
 router.post('/login', authControllers.login);
 router.get('/logout', authControllers.logout);
+router.get('/username', authControllers.username);
 // router.get('/profile', authControllers.profile);
 
 module.exports = router;
