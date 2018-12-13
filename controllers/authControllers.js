@@ -25,6 +25,14 @@ module.exports.signup = function signupExport(req, res) {
   });
 };
 
+module.exports.username = function usernameExport(req, res) {
+  console.log(req.user.firstName);
+  const firstName = req.user.firstName;
+  res.json({
+    firstName,
+  })
+};
+
 module.exports.login = function loginExport(req, res, next) {
   console.log(req.body.email);
   passport.authenticate('local', (err, user) => {
@@ -37,7 +45,6 @@ module.exports.login = function loginExport(req, res, next) {
       req.logIn(user, (error) => {
         if (!error) {
           console.log('logged in!');
-          console.log(req);
           return res.json({
             msg: 'User logged in successfully!',
             email: user.email,
